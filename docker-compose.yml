@@ -4,7 +4,19 @@ services:
     container_name: flask_app
     ports:
       - "5000:5000"
-
+  cert-generator:
+    image: openquantumsafe/oqs-ossl3:latest
+    container_name: cert-generator
+    volumes:
+      - ./certs:/certs
+      - ./cert-generator:/cert-generator
+    stdin_open: true
+    env_file:
+      - ./cert-generator/.env
+    tty: true
+    entrypoint: >
+      sh -c "/bin/sh /cert-generator/generate_certs.sh && tail -f /dev/null"
+      
   nginx:
     image: riccardidario1/nginx-pq:latest 
     container_name: nginx_pq
@@ -16,4 +28,6 @@ services:
       - ./nginx/start_server.py:/opt/nginx/start_server.py
       - ./nginx/nginx.conf:/opt/nginx/nginx.conf
     privileged: true
+    depends_on:
+      - cert-generator
     entrypoint: ["/bin/sh", "-c", "nginx -c /opt/nginx/nginx.conf -g 'daemon off;' & sleep 5 && python3 /opt/nginx/start_server.py && tail -f /dev/null"]
