@@ -18,7 +18,7 @@ SERVER_CHAIN="/certs/qsc-ca-chain.crt"
 SERVER_CSR="/certs/server.csr"
 
 # Definisce l'IP del server per il certificato
-SERVER_IP="192.168.1.3"
+SERVER_IP="192.168.1.115"
 
 # Controlla se i certificati esistono già
 if [ -f "$CA_KEY" ] && [ -f "$CA_CERT" ] && [ -f "$SERVER_KEY" ] && [ -f "$SERVER_CERT" ]; then
