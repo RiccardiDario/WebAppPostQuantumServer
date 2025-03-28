@@ -3,7 +3,7 @@
 
 import subprocess, time, re, os
 
-sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44", "ecdsa_p384", "mldsa65", "p384_mldsa65", "ecdsa_p521", "mldsa87", "p521_mldsa87"]
+sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
 NUM_RUNS, TIMEOUT, SLEEP = 5, 300, 2
 SERVER = "nginx_pq"
 SERVER_DONE = r"--- Informazioni RAM ---"
