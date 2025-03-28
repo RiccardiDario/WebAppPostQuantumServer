@@ -1,34 +1,47 @@
+volumes:
+  certs:
+
+networks:
+  pq_net:
+    name: pq_net
+
 services:
   server:
-    image: riccardidario1/flask-server:latest
+    image: riccardidario1/flask-app:latest
     container_name: flask_app
+    networks:
+      - pq_net
     ports:
       - "5000:5000"
   cert-generator:
     image: openquantumsafe/oqs-ossl3:latest
     container_name: cert-generator
     volumes:
-      - ./certs:/certs
+      - certs:/certs
       - ./cert-generator:/cert-generator
     stdin_open: true
     env_file:
       - ./cert-generator/.env
     tty: true
+    networks:
+      - pq_net
     entrypoint: >
       sh -c "/bin/sh /cert-generator/generate_certs.sh && tail -f /dev/null"
       
   nginx:
-    image: riccardidario1/nginx-pq:latest 
+    image: riccardidario1/nginx-webserver:latest
     container_name: nginx_pq
     ports:
       - "4433:4433"
     volumes:
-      - ./certs:/etc/nginx/certs/
+      - certs:/etc/nginx/certs/
       - ./report:/opt/nginx/output
       - ./nginx/start_server.py:/opt/nginx/start_server.py
       - ./nginx/nginx.conf:/opt/nginx/nginx.conf
     privileged: true
     depends_on:
       - cert-generator
+    networks:
+      - pq_net
     entrypoint: ["/bin/sh", "-c", "nginx -c /opt/nginx/nginx.conf -g 'daemon off;' & tail -f /dev/null"]
-    #entrypoint: ["/bin/sh", "-c", "nginx -c /opt/nginx/nginx.conf -g 'daemon off;' & sleep 5 && python3 /opt/nginx/start_server.py && tail -f /dev/null"]
+    #entrypoint: ["/bin/sh", "-c", "nginx -c /opt/nginx/nginx.conf -g 'daemon off;' & sleep 1 && python3 /opt/nginx/start_server.py && tail -f /dev/null"]
