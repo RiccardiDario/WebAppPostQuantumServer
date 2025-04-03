@@ -2,7 +2,7 @@
 #sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
 #sig_list = ["ecdsa_p384", "mldsa65", "p384_mldsa65"]
 #sig_list = ["ecdsa_p521", "mldsa87", "p521_mldsa87"]
-import subprocess, psutil, time, math, re, logging, os, random, csv, pandas as pd, matplotlib.pyplot as plt
+import subprocess, time, re, os, random, csv, pandas as pd, matplotlib.pyplot as plt
 from collections import defaultdict
 
 sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
