@@ -2,7 +2,7 @@
 #sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
 #sig_list = ["ecdsa_p384", "mldsa65", "p384_mldsa65"]
 #sig_list = ["ecdsa_p521", "mldsa87", "p521_mldsa87"]
-import subprocess, time, re, os, random, csv, pandas as pd, matplotlib.pyplot as plt
+import json, subprocess, time, re, os, random, csv, pandas as pd, matplotlib.pyplot as plt
 from collections import defaultdict
 
 sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
@@ -10,9 +10,10 @@ NUM_RUNS, TIMEOUT, SLEEP = 3, 300, 2
 SERVER, SERVER_DONE = "nginx_pq", r"--- Informazioni RAM ---"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ENV_PATH = os.path.join(BASE_DIR, "cert-generator/.env")
+ENV_PATH, SHARED_VOLUMED_PATH = os.path.join(BASE_DIR, "cert-generator/.env"), os.path.join(BASE_DIR, "shared_plan")
 GRAPH_DIR, FILTERED_LOG_DIR = os.path.join(BASE_DIR, "report/graph"), os.path.join(BASE_DIR, "report/filtered_logs")
-for d in (GRAPH_DIR, FILTERED_LOG_DIR): os.makedirs(d, exist_ok=True)
+for d in (GRAPH_DIR, FILTERED_LOG_DIR, SHARED_VOLUMED_PATH): os.makedirs(d, exist_ok=True)
+plan_path = os.path.join(SHARED_VOLUMED_PATH, "plan.json")
 
 def run_subprocess(cmd, timeout=None):
     try:
@@ -111,6 +112,9 @@ def get_kem_sig_from_monitor_file(filepath):
 def run_all_tests_randomized():
     plan = [(i, j) for i in range(len(sig_list)) for j in range(1, NUM_RUNS + 1)]
     random.shuffle(plan)
+    with open(plan_path, "w", encoding="utf-8") as f:
+        json.dump(plan, f)
+    print(f"📤 Piano test salvato in {plan_path}")
     last_sig = None
     for scenario_idx, replica in plan:
         sig = sig_list[scenario_idx]

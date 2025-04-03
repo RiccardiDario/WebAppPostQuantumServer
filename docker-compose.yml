@@ -6,6 +6,8 @@ services:
   server:
     image: riccardidario1/flask-app:latest
     container_name: flask_app
+    volumes:
+      - ./shared_plan:/shared_plan
     ports:
       - "5000:5000"
   cert-generator:
