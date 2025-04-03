@@ -5,7 +5,7 @@
 import subprocess, psutil, time, math, re, logging, os, random, csv, pandas as pd, matplotlib.pyplot as plt
 from collections import defaultdict
 
-sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44", "ecdsa_p384", "mldsa65", "p384_mldsa65", "ecdsa_p521", "mldsa87", "p521_mldsa87"]
+sig_list = ["ecdsa_p256", "mldsa44", "p256_mldsa44"]
 NUM_RUNS, TIMEOUT, SLEEP = 3, 300, 2
 SERVER, SERVER_DONE = "nginx_pq", r"--- Informazioni RAM ---"
 
