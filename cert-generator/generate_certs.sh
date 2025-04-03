@@ -5,7 +5,7 @@ set -e
 
 CA_KEY="/certs/CA.key"; CA_CERT="/certs/CA.crt"; SERVER_KEY="/certs/server.key"
 SERVER_CERT="/certs/server.crt"; SERVER_CHAIN="/certs/qsc-ca-chain.crt"; SERVER_CSR="/certs/server.csr"
-SERVER_IP="192.168.1.3"
+SERVER_IP="192.168.1.7"
 
 openssl_pkey() {
   case "$1" in
